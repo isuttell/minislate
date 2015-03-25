@@ -62,7 +62,11 @@ iusto molestiae consectetur <span class=woot>qui</span> sequi numquam deleniti p
 <script>
 window.addEventListener('DOMContentLoaded', function() {
     function newEditor(element) {
-      var editor = new Minislate.simpleEditor(element);
+      var editor = new Minislate.simpleEditor(element, {
+        controls: {
+          oembed: false
+        }
+      });
 
       var htmlResult = document.createElement('textarea');
       htmlResult.setAttribute('rows', 10);

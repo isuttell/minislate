@@ -3,6 +3,8 @@
 module.exports = function(grunt) {
     'use strict';
 
+    require('time-grunt');
+
     var pkg = grunt.file.readJSON('package.json');
 
     grunt.initConfig({
@@ -94,7 +96,7 @@ module.exports = function(grunt) {
                             ' * Includes Rangy\n' +
                             ' * https://code.google.com/p/rangy/\n' +
                             ' *\n' +
-                            ' * Copyright <%= grunt.template.today("yyyy") %>, <%= pkg.author.name %> and contributors\n' +
+                            ' * Copyright <%= grunt.template.today("yyyy") %>\n' +
                             ' * Released under the <%= pkg.license %> license\n' +
                             ' *\n' +
                             ' * Date: <%= grunt.template.today("isoUtcDateTime") %>\n' +
@@ -107,7 +109,7 @@ module.exports = function(grunt) {
                 options: {
                     sourceMap: true,
                     banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - '+
-                    '<%= grunt.template.today("isoUtcDateTime") %> - <%= pkg.author.name %> and contributors. */\n'
+                    '<%= grunt.template.today("isoUtcDateTime") %>. */\n'
                 }
             }
         },
@@ -131,15 +133,31 @@ module.exports = function(grunt) {
         watch: {
             css: {
                 files: ['src/css/*.styl'],
-                tasks: ['stylus:dev', 'autoprefixer:dist']
+                tasks: ['stylus:dev', 'autoprefixer:dist'],
+                options: {
+                    atBegin: true,
+                }
             },
             js: {
                 files: ['src/*.js', 'src/**/*.js'],
-                tasks: ['build', 'copy:dist', 'uglify:dist']
+                tasks: ['build', 'copy:dist'],
+                options: {
+                    atBegin: true
+                }
             },
             fonts: {
                 files: ['src/css/fonts/*'],
-                tasks: ['copy:fonts']
+                tasks: ['copy:fonts'],
+                options: {
+                    atBegin: true
+                }
+            },
+            // Reload this file when it changes so we don't have to manually restart watch
+            grunt: {
+              files: ['Gruntfile.js'],
+              options: {
+                reload: true
+              },
             }
         },
 
@@ -168,6 +186,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['browserify']);
     grunt.registerTask('dist', ['build', 'copy:dist', 'uglify', 'stylus', 'autoprefixer:dist', 'copy:fonts', 'zip']);
     grunt.registerTask('rangy', ['copy:rangy', 'bundle:rangy']);
-    grunt.registerTask('runserver', ['dist', 'connect:dev', 'watch']);
+    grunt.registerTask('runserver', ['connect:dev', 'watch']);
     grunt.registerTask('release', ['clean', 'dist', 'gh-pages']);
+    grunt.registerTask('default', ['runserver']);
 };

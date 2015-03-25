@@ -1,8 +1,8 @@
 /* jshint newcap:false */
 /* global require, exports */
-var Class = require('./util').Class;
-var extend = require('./util').extend;
-var _ = require('./util')._;
+var Class = require('./class');
+var extend = require('./extend');
+var _ = require('./util');
 
 var HtmlCleaner = Class(Object, {
     defaults: {
@@ -161,5 +161,4 @@ var HtmlCleaner = Class(Object, {
     }
 });
 
-
-exports.HtmlCleaner = HtmlCleaner;
+module.exports = HtmlCleaner;

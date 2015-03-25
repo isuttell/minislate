@@ -1,12 +1,10 @@
-/* jshint newcap:false */
-/* global require, exports */
-var _util = require('./util'),
-    _controls = require('./controls'),
+/**
+ * Toolbar
+ */
 
-    ControlsMixin = _controls.ControlsMixin,
-    extend = _util.extend,
-    Class = _util.Class;
-
+var ControlsMixin = require('./controls/ControlsMixin');
+var extend = require('./extend');
+var Class = require('./class');
 
 var Toolbar = Class(Object, {
     defaults: {
@@ -113,4 +111,4 @@ var Toolbar = Class(Object, {
     }
 });
 
-exports.Toolbar = Toolbar;
+module.exports = Toolbar;

@@ -1,8 +1,8 @@
 /* global require:true */
-var rangy = require('../vendor/rangy/core');
-var _ = require('./util')._;
+var rangy = require('rangy');
+var _ = require('./util');
 
-rangy.api.createCoreModule('RangyExtensions', [], function(api) {
+rangy.createCoreModule('RangyExtensions', [], function(api) {
     //
     // Selection extensions
     //
