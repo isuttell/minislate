@@ -98,15 +98,15 @@ var Editor = Class(Object, {
         var self = this,
             timeout = null;
 
-        var wrapper = function(evt) {
+        this.selectWrapper = function(evt) {
             clearTimeout(timeout);
             timeout = setTimeout(function() {
                 self._onSelect(evt);
             }, self.options.delay);
         };
 
-        document.addEventListener('mouseup', wrapper);
-        document.addEventListener('keyup', wrapper);
+        document.addEventListener('mouseup', this.selectWrapper);
+        document.addEventListener('keyup', this.selectWrapper);
 
         return this;
     },
@@ -125,20 +125,27 @@ var Editor = Class(Object, {
     },
 
     /**
-     * Remove styling on Paste
+     * Remove any styles from a paste event
+     * @param     {Event}    event
+     */
+    pasteEvent: function(event) {
+        // cancel paste
+        event.preventDefault();
+
+        // get text representation of clipboard
+        var text = event.clipboardData.getData("text/plain");
+
+        // insert text manually
+        document.execCommand('insertHTML', false, text);
+    },
+
+    /**
+     * Bind the paste event to the element
      */
     bindPaste: function() {
         if(this.options.pasteAsText === false) { return; }
-        this.element.addEventListener('paste', function(event) {
-            // cancel paste
-            event.preventDefault();
 
-            // get text representation of clipboard
-            var text = event.clipboardData.getData("text/plain");
-
-            // insert text manually
-            document.execCommand('insertHTML', false, text);
-        });
+        this.element.addEventListener('paste', this.pasteEvent);
     },
 
     initToolbar: function() {
@@ -397,6 +404,20 @@ var Editor = Class(Object, {
             html = cleaner.clean(html);
         }
         return html;
+    },
+
+    /**
+     * Clean up and destroy all the things
+     */
+    destroy: function() {
+        this.isActive = false;
+        this.hideToolbar();
+        this.element.setAttribute('contentEditable', false);
+        this.element.setAttribute('data-editor-element', false);
+        this.element.removeEventListener('paste', this.pasteEvent);
+        document.removeEventListener('mouseup', this.selectWrapper);
+        document.removeEventListener('keyup', this.selectWrapper);
+
     }
 });
 
