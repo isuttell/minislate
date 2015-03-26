@@ -73,6 +73,7 @@ var Link = Class(Button, {
         } else if (url) { //  New link
             node = document.createElement('a');
             node.setAttribute('href', url);
+            node.setAttribute('target', '_blank');
             var contents = range.cloneContents();
             _.each(contents.childNodes, function(n) {
                 node.appendChild(n.cloneNode(true));
